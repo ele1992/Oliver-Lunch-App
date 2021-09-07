@@ -4,12 +4,14 @@ import { selectTotal } from '../redux/products'
 import { Link } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
+
 	root: {
 		padding: theme.spacing(2)
 	},
 	navButton: {
 		marginTop: theme.spacing(2)
 	}
+
 }))
 
 const Main: React.FC = () => {

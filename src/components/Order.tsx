@@ -21,7 +21,15 @@ const useStyles = makeStyles((theme) => ({
 	},
 	orderButton: {
 		marginTop: theme.spacing(2)
-	}
+	},
+	totalAmountButtons: {
+		display: 'flex',
+		justifyContent: 'space-around'
+	},
+	orderButtonAddition: {
+		flex: 1,
+		margin: '0.25em'
+	},
 }))
 
 const Order: React.FC = () => {
@@ -102,6 +110,18 @@ const Order: React.FC = () => {
 	return (
 		<div className={classes.root}>
 			{productRows}
+			<div className={classes.totalAmountButtons}>
+				<Button
+					variant="contained"
+					color="primary"
+					className={classes.orderButtonAddition}>Broodje Plus
+				</Button>
+				<Button
+					variant="contained"
+					color="primary"
+					className={classes.orderButtonAddition}>Broodje Min
+				</Button>
+			</div>
 			<Button
 				fullWidth
 				variant="contained"
