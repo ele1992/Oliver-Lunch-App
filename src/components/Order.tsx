@@ -7,9 +7,14 @@ import {
 	MenuItem,
 	Select
 } from '@material-ui/core'
-import { useState } from 'react'
+import DeleteIcon from '@material-ui/icons/Delete';
+import { useState,useEffect } from 'react'
 import { useAppSelector } from '../redux'
 import { selectAll } from '../redux/products'
+import { OrderData } from '../types'
+
+
+
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -22,21 +27,22 @@ const useStyles = makeStyles((theme) => ({
 	orderButton: {
 		marginTop: theme.spacing(2)
 	},
-	totalAmountButtons: {
-		display: 'flex',
-		justifyContent: 'space-around'
-	},
-	orderButtonAddition: {
-		flex: 1,
-		margin: '0.25em'
-	},
+
+	orderRemoveButton: {
+		width:'10px',
+		height:'55px',
+		marginTop:'8px',
+		borderRadius:'0.5em'
+	}
 }))
 
 const Order: React.FC = () => {
 	const classes = useStyles()
 
-	const [selectedProductIds, setSelectedProductIds] = useState([0, 0, 0])
-	const [amounts, setAmounts] = useState([0, 0, 0])
+	const [selectedProductIds, setSelectedProductIds] = useState([0])
+	const [amounts, setAmounts] = useState([1])
+	const [order, setOrder] = useState<OrderData[]>([])
+
 
 	const products = useAppSelector((state) => selectAll(state.products))
 	let productMenuItems = products.map((product) => (
@@ -50,11 +56,30 @@ const Order: React.FC = () => {
 		</MenuItem>
 	].concat(productMenuItems)
 
-	const amountMenuItems = [0, 1, 2, 3, 4, 5].map((amount) => (
+	const amountMenuItems = [ 1, 2, 3, 4, 5].map((amount) => (
 		<MenuItem key={amount} value={amount}>
 			{amount}
 		</MenuItem>
 	))
+
+
+	useEffect(()=>{
+		const combinedArray=()=>{
+			const combinedArray = (selectedProductIds.map((productId,index)=>(
+
+					{productId:productId, amount:amounts[index]}
+				
+				  )
+				
+				))	
+				return 	setOrder(combinedArray)
+		}
+		combinedArray()
+	
+	},[selectedProductIds,amounts])
+
+
+
 
 	const handleProductChange =
 		(index: number) => (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -69,10 +94,31 @@ const Order: React.FC = () => {
 			newAmounts[index] = parseInt(event.target.value as string, 10)
 			setAmounts(newAmounts)
 		}
+	const handleAddButton = () => {
+		setSelectedProductIds([...selectedProductIds].concat(0))
+		setAmounts([...amounts].concat(1))
+	}
+
+	const handleRemoveButton = (index: number) => {
+		const newSelectedProductIds = [...selectedProductIds]
+		const newAmounts = [...amounts]
+
+		newSelectedProductIds.splice(index, 1)
+		newAmounts.splice(index, 1)
+
+		setSelectedProductIds(newSelectedProductIds)
+		setAmounts(newAmounts)
+	}
+
+	const handleOrderButton = () =>{
+		console.log(order)
+		setSelectedProductIds([0])
+		setAmounts([1])
+	}
 
 	const productRows = selectedProductIds.map((selectedProductId, index) => (
 		<Grid key={index} container spacing={2}>
-			<Grid item xs={9}>
+			<Grid item xs={8}>
 				<FormControl
 					fullWidth
 					variant="outlined"
@@ -88,7 +134,7 @@ const Order: React.FC = () => {
 					</Select>
 				</FormControl>
 			</Grid>
-			<Grid item xs>
+			<Grid item xs={2}>
 				<FormControl
 					fullWidth
 					variant="outlined"
@@ -104,29 +150,37 @@ const Order: React.FC = () => {
 					</Select>
 				</FormControl>
 			</Grid>
-		</Grid>
+			<Grid item xs={1}>
+				<Button
+
+					variant="contained"
+					color="secondary"
+					onClick={() => handleRemoveButton(index)}
+					className={classes.orderRemoveButton}><DeleteIcon/>
+				</Button>
+			</Grid>
+		</Grid >
 	))
 
 	return (
 		<div className={classes.root}>
 			{productRows}
-			<div className={classes.totalAmountButtons}>
-				<Button
-					variant="contained"
-					color="primary"
-					className={classes.orderButtonAddition}>Broodje Plus
-				</Button>
-				<Button
-					variant="contained"
-					color="primary"
-					className={classes.orderButtonAddition}>Broodje Min
-				</Button>
-			</div>
+
+			<Button
+				fullWidth
+				variant="contained"
+				color="primary"
+				onClick={() => handleAddButton()}
+				className={classes.orderButton}>Broodje Plus
+			</Button>
+
+
 			<Button
 				fullWidth
 				variant="contained"
 				color="primary"
 				className={classes.orderButton}
+				onClick={()=>handleOrderButton()}
 			>
 				Plaats bestelling
 			</Button>

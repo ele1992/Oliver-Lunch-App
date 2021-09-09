@@ -5,6 +5,8 @@ import { List, ListItem, ListItemText, makeStyles, Typography, Divider } from '@
 const useStyles = makeStyles((theme) => ({
 	root: {
 		padding: theme.spacing(2),
+		overflow: 'scroll',
+		height: '90vh',
 
 	},
 	listItems: {
@@ -14,21 +16,6 @@ const useStyles = makeStyles((theme) => ({
 		},
 		marginBottom: '0.25em',
 		marginTop: '0.5em',
-		// position: 'relative',
-		// '&::after': {
-		// 	position: 'absolute',
-		// 	top: '100%',
-		// 	left: '0%',
-		// 	width: 0,
-		// 	height: '2px',
-		// 	background: '#222',
-		// 	display: 'block',
-		// 	content: '" "',
-		// 	transition: 'width 0.5s ease-in-out',
-		// },
-		// '&::after:hover': {
-		// 	width: '100%',
-		// }
 	},
 	listItemText: {
 

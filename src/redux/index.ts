@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import productsReducer from './products'
+import ordersReducer from './orders/reducer'
 
 const store = configureStore({
 	reducer: {
-		products: productsReducer
+		products: productsReducer,
+		orders: ordersReducer,
 	}
 })
 
